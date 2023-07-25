@@ -16,6 +16,7 @@ const FORBIDDEN_MOVIE_DELETE_MESSAGE = 'Нельзя удалять чужие �
 const EXISTING_EMAIL_MESSAGE = 'Пользователь с таким email уже существует.';
 const NONEXISTENT_URL_MESSAGE = 'Запрашиваемый ресурс не найден.';
 const AUTH_SUCCESS_MESSAGE = 'Успешная авторизация.';
+const LOG_OUT_MESSAGE = 'Вы вышли из системы.';
 module.exports = {
   urlRegex,
   OK_CODE,
@@ -35,4 +36,5 @@ module.exports = {
   EXISTING_EMAIL_MESSAGE,
   NONEXISTENT_URL_MESSAGE,
   AUTH_SUCCESS_MESSAGE,
+  LOG_OUT_MESSAGE,
 };
