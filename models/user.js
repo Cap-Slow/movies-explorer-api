@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
   },
   name: {
     type: String,
-    default: 'Жак-Ив Кусто',
+    default: 'Кристофер Нолан',
     minlength: 2,
     maxlength: 30,
   },
