@@ -3,7 +3,7 @@ const {
   OK_CODE,
   CREATED_CODE,
   NOT_FOUND_MOVIEID,
-  FORBIDDEN_MOVIE_DELETE_MESSAGE
+  FORBIDDEN_MOVIE_DELETE_MESSAGE,
 } = require('../utils/constants');
 const NotFoundError = require('../utils/errors/notFoundError');
 const ForbiddenError = require('../utils/errors/forbiddenError');
