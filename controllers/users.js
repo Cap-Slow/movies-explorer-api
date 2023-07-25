@@ -5,6 +5,7 @@ const NotFoundError = require('../utils/errors/notFoundError');
 const UnauthorizedError = require('../utils/errors/unauthorizedError');
 const {
   OK_CODE,
+  CREATED_CODE,
   NOT_FOUND_USERID,
   WRONG_CREDENTIALS_MESSAGE,
   AUTH_SUCCESS_MESSAGE,
@@ -82,8 +83,28 @@ function login(req, res, next) {
     .catch(next);
 }
 
+function createUser(req, res, next) {
+  const {
+    name, email,
+  } = req.body;
+  bcrypt
+    .hash(req.body.password, 10)
+    .then((hash) => User.create({
+      name,
+      email,
+      password: hash,
+    }).then((user) => {
+      const userWithoutVersion = user.toObject();
+      delete userWithoutVersion.__v;
+      delete userWithoutVersion.password;
+      return res.status(CREATED_CODE).send(userWithoutVersion);
+    }))
+    .catch(next);
+}
+
 module.exports = {
   getUserInfo,
   decoratedUpdateProfile,
   login,
+  createUser,
 };
