@@ -9,6 +9,7 @@ const {
   NOT_FOUND_USERID,
   WRONG_CREDENTIALS_MESSAGE,
   AUTH_SUCCESS_MESSAGE,
+  LOG_OUT_MESSAGE,
 } = require('../utils/constants');
 
 const { JWT_SECRET } = process.env;
@@ -102,9 +103,14 @@ function createUser(req, res, next) {
     .catch(next);
 }
 
+function signOut(req, res) {
+  res.clearCookie('jwt').send({ message: LOG_OUT_MESSAGE });
+}
+
 module.exports = {
   getUserInfo,
   decoratedUpdateProfile,
   login,
   createUser,
+  signOut,
 };
