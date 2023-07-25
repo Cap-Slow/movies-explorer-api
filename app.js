@@ -1,4 +1,5 @@
 require('dotenv').config();
+const helmet = require('helmet');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
@@ -22,6 +23,7 @@ app.use(
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(helmet());
 app.use(requestLogger);
 app.use(routes);
 app.use(errorLogger);
