@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 const cors = require('cors');
 const routes = require('./routes');
+const handleErrors = require('./middlewares/handleErrors');
 const { requestLogger, errorLogger } = require('./logger');
 
 const { PORT = 3000, DATABASE_PATH } = process.env;
@@ -25,5 +26,5 @@ app.use(requestLogger);
 app.use(routes);
 app.use(errorLogger);
 app.use(errors());
-// app.use(handleErrors);
+app.use(handleErrors);
 app.listen(PORT);
