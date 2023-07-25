@@ -18,6 +18,6 @@ userRoutes.get('/users/me', auth, userIdValidator, getUserInfo);
 userRoutes.patch('/users/me', auth, userProfileUpdateValidator, decoratedUpdateProfile);
 userRoutes.post('/signin', userLoginValidator, login);
 userRoutes.post('/signup', userSignUpValidator, createUser);
-userRoutes.post('/signout', signOut);
+userRoutes.post('/signout', auth, signOut);
 
 module.exports = userRoutes;
