@@ -10,14 +10,14 @@ const routes = require('./routes');
 const handleErrors = require('./middlewares/handleErrors');
 const { requestLogger, errorLogger } = require('./logger');
 
-const { PORT = 3000, DATABASE_PATH } = process.env;
+const { PORT = 4000, DATABASE_PATH } = process.env;
 mongoose.connect(DATABASE_PATH || 'mongodb://localhost:27017/bitfilmsdb', {
   useNewUrlParser: true,
 });
 const app = express();
 app.use(
   cors({
-    origin: ['http://localhost:3000'],
+    origin: ['http://localhost:3000', 'https://slammovies.nomoreparties.sbs'],
     credentials: true,
   }),
 );
