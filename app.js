@@ -8,7 +8,7 @@ const cors = require('cors');
 const limiter = require('./middlewares/rate-limiter');
 const routes = require('./routes');
 const handleErrors = require('./middlewares/handleErrors');
-const { requestLogger, errorLogger } = require('./logger');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 4000, DATABASE_PATH } = process.env;
 mongoose.connect(DATABASE_PATH || 'mongodb://localhost:27017/bitfilmsdb', {
