@@ -7,7 +7,7 @@ const { NONEXISTENT_URL_MESSAGE } = require('../utils/constants');
 
 routes.use('', userRoutes);
 routes.use('/movies', auth, movieRoutes);
-routes.use('*', (req, res, next) => {
+routes.use('*', auth, (req, res, next) => {
   next(new NotFoundError(NONEXISTENT_URL_MESSAGE));
 });
 
