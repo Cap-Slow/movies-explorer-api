@@ -8,7 +8,6 @@ const {
   CREATED_CODE,
   NOT_FOUND_USERID,
   WRONG_CREDENTIALS_MESSAGE,
-  AUTH_SUCCESS_MESSAGE,
   LOG_OUT_MESSAGE,
 } = require('../utils/constants');
 
@@ -62,32 +61,32 @@ function login(req, res, next) {
         throw new UnauthorizedError(WRONG_CREDENTIALS_MESSAGE);
       }
       _id = user._id;
-      return bcrypt.compare(password, user.password);
-    })
-    .then((isPasswordMatch) => {
-      if (!isPasswordMatch) {
-        throw new UnauthorizedError(WRONG_CREDENTIALS_MESSAGE);
-      }
-      const token = jwt.sign({ _id }, JWT_SECRET || 'some-secret-key', {
-        expiresIn: '7d',
+      return bcrypt.compare(password, user.password).then((isPasswordMatch) => {
+        if (!isPasswordMatch) {
+          throw new UnauthorizedError(WRONG_CREDENTIALS_MESSAGE);
+        }
+        const token = jwt.sign({ _id }, JWT_SECRET || 'some-secret-key', {
+          expiresIn: '7d',
+        });
+        const userWithoutVersion = user.toObject();
+        delete userWithoutVersion.__v;
+        delete userWithoutVersion.password;
+        res
+          .cookie('jwt', token, {
+            maxAge: 3600000 * 24 * 7,
+            httpOnly: true,
+            sameSite: 'none',
+            secure: true,
+          })
+          .status(OK_CODE)
+          .send({ userWithoutVersion });
       });
-      res
-        .cookie('jwt', token, {
-          maxAge: 3600000 * 24 * 7,
-          httpOnly: true,
-          sameSite: 'none',
-          secure: true,
-        })
-        .status(OK_CODE)
-        .send({ message: AUTH_SUCCESS_MESSAGE });
     })
     .catch(next);
 }
 
 function createUser(req, res, next) {
-  const {
-    name, email,
-  } = req.body;
+  const { name, email } = req.body;
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) => User.create({
