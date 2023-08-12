@@ -31,7 +31,7 @@ function updateProfile(req) {
   return User.findByIdAndUpdate(
     req.user._id,
     { name, email },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   );
 }
 
@@ -75,7 +75,7 @@ function login(req, res, next) {
           .cookie('jwt', token, {
             maxAge: 3600000 * 24 * 7,
             httpOnly: true,
-            sameSite: 'None',
+            SameSite: 'None',
             secure: true,
           })
           .status(OK_CODE)
@@ -89,18 +89,16 @@ function createUser(req, res, next) {
   const { name, email } = req.body;
   bcrypt
     .hash(req.body.password, 10)
-    .then((hash) =>
-      User.create({
-        name,
-        email,
-        password: hash,
-      }).then((user) => {
-        const userWithoutVersion = user.toObject();
-        delete userWithoutVersion.__v;
-        delete userWithoutVersion.password;
-        return res.status(CREATED_CODE).send(userWithoutVersion);
-      })
-    )
+    .then((hash) => User.create({
+      name,
+      email,
+      password: hash,
+    }).then((user) => {
+      const userWithoutVersion = user.toObject();
+      delete userWithoutVersion.__v;
+      delete userWithoutVersion.password;
+      return res.status(CREATED_CODE).send(userWithoutVersion);
+    }))
     .catch(next);
 }
 
