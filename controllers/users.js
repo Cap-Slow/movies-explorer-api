@@ -75,8 +75,8 @@ function login(req, res, next) {
           .cookie('jwt', token, {
             maxAge: 3600000 * 24 * 7,
             httpOnly: true,
-            SameSite: 'None',
-            Secure: true,
+            sameSite: 'none',
+            secure: true,
           })
           .status(OK_CODE)
           .send({ userWithoutVersion });
