@@ -31,7 +31,7 @@ function updateProfile(req) {
   return User.findByIdAndUpdate(
     req.user._id,
     { name, email },
-    { new: true, runValidators: true },
+    { new: true, runValidators: true }
   );
 }
 
@@ -87,28 +87,45 @@ function login(req, res, next) {
 
 function createUser(req, res, next) {
   const { name, email } = req.body;
+  let _id;
   bcrypt
     .hash(req.body.password, 10)
-    .then((hash) => User.create({
-      name,
-      email,
-      password: hash,
-    }).then((user) => {
-      const userWithoutVersion = user.toObject();
-      delete userWithoutVersion.__v;
-      delete userWithoutVersion.password;
-      return res.status(CREATED_CODE).send(userWithoutVersion);
-    }))
+    .then((hash) =>
+      User.create({
+        name,
+        email,
+        password: hash,
+      }).then((user) => {
+        _id = user._id;
+        const token = jwt.sign({ _id }, JWT_SECRET || 'some-secret-key', {
+          expiresIn: '7d',
+        });
+        const userWithoutVersion = user.toObject();
+        delete userWithoutVersion.__v;
+        delete userWithoutVersion.password;
+        res
+          .cookie('jwt', token, {
+            maxAge: 3600000 * 24 * 7,
+            httpOnly: true,
+            sameSite: 'none',
+            secure: true,
+          })
+          .status(CREATED_CODE)
+          .send({ userWithoutVersion });
+      })
+    )
     .catch(next);
 }
 
 function signOut(req, res) {
-  res.clearCookie('jwt', {
-    path: '/',
-    httpOnly: true,
-    sameSite: 'none',
-    secure: true,
-  }).send({ message: LOG_OUT_MESSAGE });
+  res
+    .clearCookie('jwt', {
+      path: '/',
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+    })
+    .send({ message: LOG_OUT_MESSAGE });
 }
 
 module.exports = {
