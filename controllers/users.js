@@ -103,7 +103,12 @@ function createUser(req, res, next) {
 }
 
 function signOut(req, res) {
-  res.clearCookie('jwt', { path: '/' }).send({ message: LOG_OUT_MESSAGE });
+  res.clearCookie('jwt', {
+    path: '/',
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true,
+  }).send({ message: LOG_OUT_MESSAGE });
 }
 
 module.exports = {
